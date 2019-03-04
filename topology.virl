@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes'?>
 <topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.95" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.95/virl.xsd">
     <extensions>
+    <entry key="management_network" type="String">flat</entry>
         <entry key="management_network" type="String">user</entry>
     </extensions>
     <node location="678,454" type="SIMPLE" subtype="CSR1000v" name="csr1000v-1">
@@ -43,10 +44,10 @@ ip admission watch-list expiry-time 0
 !
 !
 subscriber templating
-! 
-! 
-! 
-! 
+!
+!
+!
+!
 !
 multilink bundle-name authenticated
 !
@@ -79,7 +80,6 @@ redundancy
 !
 !
 !
-! 
 !
 !
 !
@@ -90,17 +90,26 @@ redundancy
 !
 !
 !
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
 !
 !
-! 
-! 
+!
+!
 !
 !
 interface GigabitEthernet1
- ip address dhcp
- negotiation auto
- no mop enabled
- no mop sysid
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  cdp enable
+  no shutdown
 !
 interface GigabitEthernet2
  negotiation auto
@@ -119,7 +128,7 @@ ip http client source-interface GigabitEthernet1
 ip tftp source-interface GigabitEthernet1
 !
 !
-!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
 !
 !
 !
@@ -186,10 +195,10 @@ ip admission watch-list expiry-time 0
 !
 !
 subscriber templating
-! 
-! 
-! 
-! 
+!
+!
+!
+!
 !
 multilink bundle-name authenticated
 !
@@ -222,7 +231,6 @@ redundancy
 !
 !
 !
-! 
 !
 !
 !
@@ -232,18 +240,27 @@ redundancy
 !
 !
 !
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
 !
 !
 !
-! 
-! 
+!
+!
 !
 !
 interface GigabitEthernet1
- ip address dhcp
- negotiation auto
- no mop enabled
- no mop sysid
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  cdp enable
+  no shutdown
 !
 interface GigabitEthernet2
  negotiation auto
@@ -256,7 +273,7 @@ ip http secure-server
 ip http client source-interface GigabitEthernet1
 !
 !
-!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
 !
 !
 !
@@ -322,10 +339,10 @@ ip admission watch-list expiry-time 0
 !
 !
 subscriber templating
-! 
-! 
-! 
-! 
+!
+!
+!
+!
 !
 multilink bundle-name authenticated
 !
@@ -358,7 +375,6 @@ redundancy
 !
 !
 !
-! 
 !
 !
 !
@@ -371,15 +387,24 @@ redundancy
 !
 !
 !
-! 
-! 
+!
+vrf definition Mgmt-intf
+!
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
 !
 !
 interface GigabitEthernet1
- ip address dhcp
- negotiation auto
- no mop enabled
- no mop sysid
+  description OOB Management
+  vrf forwarding Mgmt-intf
+  ! Configured on launch
+  no ip address
+  cdp enable
+  no shutdown
 !
 interface GigabitEthernet2
  negotiation auto
@@ -393,7 +418,7 @@ ip http client source-interface GigabitEthernet1
 ip tftp source-interface GigabitEthernet1
 !
 !
-!
+ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
 !
 !
 !
