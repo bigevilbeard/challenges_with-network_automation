@@ -142,10 +142,13 @@ control-plane
 !
 !
 !
-line con 0
- stopbits 1
-line vty 0 4
- login
+ line vty 0 4
+  transport input ssh telnet
+  exec-timeout 720 0
+  password cisco
+  login local
+ line con 0
+  password cisco
 !
 !
 !
@@ -291,10 +294,13 @@ control-plane
 !
 !
 !
-line con 0
- stopbits 1
 line vty 0 4
- login
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
 !
 !
 !
@@ -442,10 +448,13 @@ control-plane
 !
 !
 !
-line con 0
- stopbits 1
 line vty 0 4
- login
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
 !
 !
 !
