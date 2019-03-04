@@ -2,7 +2,6 @@
 <topology xmlns="http://www.cisco.com/VIRL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" schemaVersion="0.95" xsi:schemaLocation="http://www.cisco.com/VIRL https://raw.github.com/CiscoVIRL/schema/v0.95/virl.xsd">
     <extensions>
     <entry key="management_network" type="String">flat</entry>
-        <entry key="management_network" type="String">user</entry>
     </extensions>
     <node location="678,454" type="SIMPLE" subtype="CSR1000v" name="csr1000v-1">
         <extensions>
