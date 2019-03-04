@@ -3,7 +3,7 @@
     <extensions>
     <entry key="management_network" type="String">flat</entry>
     </extensions>
-    <node location="678,454" type="SIMPLE" subtype="CSR1000v" name="csr1000v-1">
+    <node location="678,454" type="SIMPLE" subtype="CSR1000v" name="CE-1">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
         <entry key="config">!
@@ -16,7 +16,7 @@ platform qfp utilization monitor load 80
 no platform punt-keepalive disable-kernel-core
 platform console serial
 !
-hostname host-10-255-0-9
+hostname host-CE-1
 !
 boot-start-marker
 boot-end-marker
@@ -98,7 +98,11 @@ vrf definition Mgmt-intf
  exit-address-family
 !
 !
-!
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+crypto key generate rsa modulus 1024
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
 !
 !
 !
@@ -154,7 +158,7 @@ end
         <interface name="GigabitEthernet2" id="0"/>
         <interface name="GigabitEthernet3" id="1"/>
     </node>
-    <node location="583,314" type="SIMPLE" subtype="CSR1000v" name="csr1000v-2">
+    <node location="583,314" type="SIMPLE" subtype="CSR1000v" name="PE-1">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
         <entry key="config">!
@@ -167,7 +171,7 @@ platform qfp utilization monitor load 80
 no platform punt-keepalive disable-kernel-core
 platform console serial
 !
-hostname host-10-255-0-10
+hostname host-PE-1
 !
 boot-start-marker
 boot-end-marker
@@ -249,7 +253,11 @@ vrf definition Mgmt-intf
 !
 !
 !
-!
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+crypto key generate rsa modulus 1024
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
 !
 !
 !
@@ -298,7 +306,7 @@ end
 </entry></extensions>
         <interface name="GigabitEthernet2" id="0"/>
     </node>
-    <node location="756,314" type="SIMPLE" subtype="CSR1000v" name="csr1000v-3">
+    <node location="756,314" type="SIMPLE" subtype="CSR1000v" name="PE-2">
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
         <entry key="config">!
@@ -311,7 +319,7 @@ platform qfp utilization monitor load 80
 no platform punt-keepalive disable-kernel-core
 platform console serial
 !
-hostname host-10-255-0-11
+hostname host-PE-2
 !
 boot-start-marker
 boot-end-marker
@@ -395,6 +403,12 @@ vrf definition Mgmt-intf
  address-family ipv6
  exit-address-family
 !
+!
+enable password cisco
+enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+crypto key generate rsa modulus 1024
+ip ssh server algorithm authentication password
+username cisco privilege 15 secret cisco
 !
 !
 interface GigabitEthernet1
