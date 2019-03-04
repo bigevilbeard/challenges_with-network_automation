@@ -7,87 +7,9 @@
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
         <entry key="config">!
-! Last configuration change at 13:40:24 UTC Mon Mar 4 2019
-!
-version 16.9
-service timestamps debug datetime msec
-service timestamps log datetime msec
-platform qfp utilization monitor load 80
-no platform punt-keepalive disable-kernel-core
-platform console serial
-!
 hostname host-CE-1
-!
 boot-start-marker
 boot-end-marker
-!
-!
-!
-no aaa new-model
-!
-!
-!
-!
-!
-!
-!
-ip admission watch-list expiry-time 0
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-subscriber templating
-!
-!
-!
-!
-!
-multilink bundle-name authenticated
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-license udi pid CSR1000V sn 9XETFPYAPWW
-no license smart enable
-diagnostic bootup level minimal
-!
-spanning-tree extend system-id
-!
-!
-!
-!
-redundancy
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 vrf definition Mgmt-intf
 !
@@ -98,12 +20,36 @@ vrf definition Mgmt-intf
  exit-address-family
 !
 !
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
 enable password cisco
 enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
 crypto key generate rsa modulus 1024
 ip ssh server algorithm authentication password
 username cisco privilege 15 secret cisco
-!
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
 !
 !
 interface GigabitEthernet1
@@ -124,36 +70,8 @@ interface GigabitEthernet3
  no mop enabled
  no mop sysid
 !
-ip forward-protocol nd
-no ip http server
-ip http secure-server
-ip http client source-interface GigabitEthernet1
-ip tftp source-interface GigabitEthernet1
-!
 !
 ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
-!
-!
-!
-control-plane
-!
-!
-!
-!
-!
-!
- line vty 0 4
-  transport input ssh telnet
-  exec-timeout 720 0
-  password cisco
-  login local
- line con 0
-  password cisco
-!
-!
-!
-!
-!
 !
 end
 
@@ -165,86 +83,9 @@ end
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
         <entry key="config">!
-! Last configuration change at 13:40:39 UTC Mon Mar 4 2019
-!
-version 16.9
-service timestamps debug datetime msec
-service timestamps log datetime msec
-platform qfp utilization monitor load 80
-no platform punt-keepalive disable-kernel-core
-platform console serial
-!
 hostname host-PE-1
-!
 boot-start-marker
 boot-end-marker
-!
-!
-!
-no aaa new-model
-!
-!
-!
-!
-!
-!
-!
-ip admission watch-list expiry-time 0
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-subscriber templating
-!
-!
-!
-!
-!
-multilink bundle-name authenticated
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-license udi pid CSR1000V sn 90JND0513DG
-no license smart enable
-diagnostic bootup level minimal
-!
-spanning-tree extend system-id
-!
-!
-!
-!
-redundancy
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 vrf definition Mgmt-intf
 !
@@ -256,12 +97,35 @@ vrf definition Mgmt-intf
 !
 !
 !
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
 enable password cisco
 enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
 crypto key generate rsa modulus 1024
 ip ssh server algorithm authentication password
 username cisco privilege 15 secret cisco
-!
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
 !
 !
 interface GigabitEthernet1
@@ -277,35 +141,13 @@ interface GigabitEthernet2
  no mop enabled
  no mop sysid
 !
-ip forward-protocol nd
-no ip http server
-ip http secure-server
-ip http client source-interface GigabitEthernet1
+interface GigabitEthernet3
+ negotiation auto
+ no mop enabled
+ no mop sysid
 !
 !
 ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
-!
-!
-!
-control-plane
-!
-!
-!
-!
-!
-!
-line vty 0 4
- transport input ssh telnet
- exec-timeout 720 0
- password cisco
- login local
-line con 0
- password cisco
-!
-!
-!
-!
-!
 !
 end
 
@@ -316,90 +158,9 @@ end
         <extensions>
             <entry key="AutoNetkit.ASN" type="Integer">1</entry>
         <entry key="config">!
-! Last configuration change at 13:40:33 UTC Mon Mar 4 2019
-!
-version 16.9
-service timestamps debug datetime msec
-service timestamps log datetime msec
-platform qfp utilization monitor load 80
-no platform punt-keepalive disable-kernel-core
-platform console serial
-!
 hostname host-PE-2
-!
 boot-start-marker
 boot-end-marker
-!
-!
-!
-no aaa new-model
-!
-!
-!
-!
-!
-!
-!
-ip admission watch-list expiry-time 0
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-subscriber templating
-!
-!
-!
-!
-!
-multilink bundle-name authenticated
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-license udi pid CSR1000V sn 9T6OIQJI4ID
-no license smart enable
-diagnostic bootup level minimal
-!
-spanning-tree extend system-id
-!
-!
-!
-!
-redundancy
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
 !
 vrf definition Mgmt-intf
 !
@@ -410,11 +171,36 @@ vrf definition Mgmt-intf
  exit-address-family
 !
 !
+!
+license accept end user agreement
+license boot level premium
+!
+!
+no aaa new-model
+!
+!
+ipv6 unicast-routing
+!
+!
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+no service config
 enable password cisco
 enable secret 4 tnhtc92DXBhelxjYk8LWJrPV36S2i4ntXrpb4RFmfqY
+ip classless
+ip subnet-zero
+no ip domain lookup
 crypto key generate rsa modulus 1024
 ip ssh server algorithm authentication password
 username cisco privilege 15 secret cisco
+line vty 0 4
+ transport input ssh telnet
+ exec-timeout 720 0
+ password cisco
+ login local
+line con 0
+ password cisco
 !
 !
 interface GigabitEthernet1
@@ -430,36 +216,13 @@ interface GigabitEthernet2
  no mop enabled
  no mop sysid
 !
-ip forward-protocol nd
-no ip http server
-ip http secure-server
-ip http client source-interface GigabitEthernet1
-ip tftp source-interface GigabitEthernet1
+interface GigabitEthernet3
+ negotiation auto
+ no mop enabled
+ no mop sysid
 !
 !
 ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
-!
-!
-!
-control-plane
-!
-!
-!
-!
-!
-!
-line vty 0 4
- transport input ssh telnet
- exec-timeout 720 0
- password cisco
- login local
-line con 0
- password cisco
-!
-!
-!
-!
-!
 !
 end
 
