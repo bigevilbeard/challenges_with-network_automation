@@ -135,6 +135,7 @@ ip subnet-zero
 no ip domain lookup
 crypto key generate rsa modulus 1024
 ip ssh server algorithm authentication password
+ip scp server enable
 username cisco privilege 15 secret cisco
 line vty 0 4
  transport input ssh telnet
