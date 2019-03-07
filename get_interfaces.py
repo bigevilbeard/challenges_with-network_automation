@@ -4,7 +4,7 @@ import sys
 from tabulate import tabulate
 
 
-HOST = '172.16.30.65'
+HOST = '172.16.30.66'
 PORT = '443'
 USER = 'cisco'
 PASS = 'cisco'

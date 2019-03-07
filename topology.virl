@@ -51,6 +51,7 @@ line vty 0 4
 line con 0
  password cisco
 !
+restconf
 !
 interface GigabitEthernet1
   description OOB Management
@@ -145,6 +146,8 @@ line vty 0 4
 line con 0
  password cisco
 !
+restconf
+!
 ip access-list extended DROP
  deny   icmp any any
  permit tcp any any
@@ -230,6 +233,8 @@ line vty 0 4
  login local
 line con 0
  password cisco
+!
+restconf 
 !
 interface Loopback1
  ip address 172.168.1.1 255.255.255.0
