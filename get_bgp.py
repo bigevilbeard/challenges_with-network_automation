@@ -1,13 +1,21 @@
 import requests
 import urllib3
 import sys
+import argparse
 from tabulate import tabulate
 
 
-HOST = '172.16.30.66'
-PORT = '443'
-USER = 'cisco'
-PASS = 'cisco'
+# HOST = '172.16.30.66'
+# PORT = '443'
+# USER = 'cisco'
+# PASS = 'cisco'
+
+HOST = 'ios-xe-mgmt.cisco.com'
+PORT = '9443'
+USER = 'root'
+PASS = 'D_Vay!_10&'
+
+
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -24,7 +32,11 @@ def main():
     neighbors = get_bgp()
     # print(neighbors)
 
-    headers = ["Neighbor", "LINK", "UP-TIME", "STATE", "PfxRcd" ]
+    headers = ["Neighbor",
+    "LINK",
+    "UP-TIME",
+    "STATE",
+    "PfxRcd" ]
     table = list()
 
     for item in neighbors['Cisco-IOS-XE-bgp-oper:bgp-state-data']['neighbors']['neighbor']:
@@ -39,4 +51,14 @@ def main():
     print(tabulate(table, headers, tablefmt="fancy_grid"))
 
 if __name__ == '__main__':
-    sys.exit(main())
+    # sys.exit(main())
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('-a', '--host', type=str, required=True,
+                        help="Device IP address or Hostname")
+    parser.add_argument('-u', '--username', type=str, required=True,
+                        help="Device Username (RESTCONF device username)")
+    parser.add_argument('-p', '--password', type=str, required=True,
+                        help="Device Password (RESTCONF device password)")
+    parser.add_argument('--port', type=int, default=830,
+                        help="RESTCONF agent port")
