@@ -1,6 +1,7 @@
 import requests
 import urllib3
 import logging.config
+import json
 
 config = {
     'disable_existing_loggers': False,
@@ -94,7 +95,7 @@ class iosxerestapi(object):
             dict_temp['total-prefixes'] = DictQuery(neighbor.get('prefix-activity')).get('received/total-prefixes')
             neighbors_list['Cisco-IOS-XE-bgp-oper:bgp-state-data']['neighbors'].append(dict_temp)
 
-        return neighbors_list
+        return json.dumps(neighbors_list, sort_keys=False, indent=4)
 
 
     def get_interfaces_oper(self):
@@ -119,4 +120,4 @@ class iosxerestapi(object):
 
             interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces']['interface'].append(dict_temp)
 
-        return interfaces_list
+        return json.dumps(interfaces_list, sort_keys=False, indent=4)
