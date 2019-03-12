@@ -100,14 +100,23 @@ class iosxerestapi(object):
     def get_interfaces_oper(self):
         # return self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
         interfaces_list = dict()
-        interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces'] = {'interfaces':[]}
-        interfaces = DictQuery(self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')).get('Cisco-IOS-XE-interfaces-oper:interfaces/interfaces')
+        interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces'] = {'interface':[]}
+        interfaces = DictQuery(self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')).get('Cisco-IOS-XE-interfaces-oper:interfaces/interface')
 
         for interface in interfaces:
             dict_temp = {}
-            dict_temp['name'] = interface.get('name',None)
-            dict_temp['description'] = interface.get('description',None)
+            dict_temp['name'] = interface.get('name')
+            dict_temp['description'] = interface.get('description')
+            dict_temp['ipv4'] = interface.get('ipv4')
+            dict_temp['vrf'] = interface.get('vrf')
+            dict_temp['admin-status'] = interface.get('admin-status')
+            dict_temp['in-discards'] = interface.get('in-discards')
+            dict_temp['in-errors'] = interface.get('in-errors')
+            dict_temp['out-discards'] = interface.get('out-discards')
+            dict_temp['out-errors'] = interface.get('out-errors')
+            dict_temp['in-pkts'] = interface.get('in-pkts')
+            dict_temp['out-pkts'] = interface.get('out-pkts')
 
-            interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces']['interfaces'].append(dict_temp)
-            
+            interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces']['interface'].append(dict_temp)
+
         return interfaces_list
