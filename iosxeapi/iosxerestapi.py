@@ -32,6 +32,25 @@ config = {
 
 logging.config.dictConfig(config)
 
+class DictQuery(dict):
+    def get(self, path, default = None):
+        keys = path.split("/")
+        val = None
+
+        for key in keys:
+            if val:
+                if isinstance(val, list):
+                    val = [ v.get(key, default) if v else None for v in val]
+                else:
+                    val = val.get(key, default)
+            else:
+                val = dict.get(self, key, default)
+
+            if not val:
+                break;
+
+        return val
+
 class iosxerestapi(object):
     def __init__(self, host=None, username=None, password=None, port=443):
         self.host = host
@@ -61,7 +80,34 @@ class iosxerestapi(object):
             self.logger.error(e)
 
     def get_bgp(self):
-        return self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')
+        neighbors_list = dict()
+        neighbors_list['Cisco-IOS-XE-bgp-oper:bgp-state-data'] = {'neighbors':[]}
+        neighbors = DictQuery(self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')).get('Cisco-IOS-XE-bgp-oper:bgp-state-data/neighbors/neighbor')
+        # return neighbors
+        # return self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')
+        for neighbor in neighbors:
+            dict_temp = {}
+            dict_temp['neighbor-id'] = neighbor.get('neighbor-id',None)
+            dict_temp['link'] = neighbor.get('link',None)
+            dict_temp['up-time'] = neighbor.get('up-time',None)
+            dict_temp['state'] = DictQuery(neighbor.get('connection')).get('state')
+            dict_temp['total-prefixes'] = DictQuery(neighbor.get('prefix-activity')).get('received/total-prefixes')
+            neighbors_list['Cisco-IOS-XE-bgp-oper:bgp-state-data']['neighbors'].append(dict_temp)
+
+        return neighbors_list
+
 
     def get_interfaces_oper(self):
-        return self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
+        # return self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
+        interfaces_list = dict()
+        interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces'] = {'interfaces':[]}
+        interfaces = DictQuery(self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')).get('Cisco-IOS-XE-interfaces-oper:interfaces/interfaces')
+
+        for interface in interfaces:
+            dict_temp = {}
+            dict_temp['name'] = interface.get('name',None)
+            dict_temp['description'] = interface.get('description',None)
+
+            interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces']['interfaces'].append(dict_temp)
+            
+        return interfaces_list
