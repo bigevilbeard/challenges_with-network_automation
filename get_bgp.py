@@ -51,14 +51,4 @@ def main():
     print(tabulate(table, headers, tablefmt="fancy_grid"))
 
 if __name__ == '__main__':
-    # sys.exit(main())
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('-a', '--host', type=str, required=True,
-                        help="Device IP address or Hostname")
-    parser.add_argument('-u', '--username', type=str, required=True,
-                        help="Device Username (RESTCONF device username)")
-    parser.add_argument('-p', '--password', type=str, required=True,
-                        help="Device Password (RESTCONF device password)")
-    parser.add_argument('--port', type=int, default=830,
-                        help="RESTCONF agent port")
+    sys.exit(main())
