@@ -19,7 +19,7 @@ class User(object):
 @click.option("--password",help="Device password")
 @click.pass_context
 def main(ctx,ip, port, username, password):
-    """Gather device information using restconf."""
+    """Gather and Add IOS XE device information using restconf"""
 
     ctx.obj = User(ip,port, username, password)
     click.secho("Getting information")
@@ -28,14 +28,22 @@ def main(ctx,ip, port, username, password):
 @main.command()
 @click.pass_obj
 def get_bgp(ctx):
+    """Gather BGP information"""
     bgp = ctx.set_up().get_bgp()
     print(bgp)
 
 @main.command()
 @click.pass_obj
 def get_interfaces(ctx):
+    """Gather Interface information"""
     intf = ctx.set_up().get_interfaces_oper()
     print(intf)
 
+@main.command()
+@click.pass_obj
+def add_drop(ctx):
+    """Add ACL to Interface """
+    intf = ctx.set_up().add_access_group()
+    print(intf)
 
 main()
