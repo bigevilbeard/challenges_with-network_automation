@@ -4,45 +4,38 @@ import click
 
 
 class User(object):
-    def __init__(self, ip=None, port=None, username=None, password=None, restconf=None):
+    def __init__(self, ip=None, port=None, username=None, password=None):
         self.ip = ip
         self.port = port
         self.username = username
         self.password = password
-        self.restconf = restconf
+    def set_up(self):
+        return iosxerestapi(host=self.ip, username=self.username, password=self.password, port=self.port)
 
 @click.group()
-@click.argument("--ip",help="ip address of device")
-@click.argument("--port",help="device port")
-@click.argument("--username",help="Device username")
-@click.argument("--password",help="Device password")
-@click.argument('--restconf', type=click.Choice(['bgp', 'interfaces']))
-
-def main(ctx,ip, port, username, password, restconf):
+@click.option("--ip",help="ip address of device")
+@click.option("--port",help="device port")
+@click.option("--username",help="Device username")
+@click.option("--password",help="Device password")
+@click.pass_context
+def main(ctx,ip, port, username, password):
     """Gather device information using restconf."""
 
-    ctx.obj = User(ip,port, username, password, restconf)
+    ctx.obj = User(ip,port, username, password)
     click.secho("Getting information")
 
-@main.command()
-@click.pass_obj
-def login(ctx):
-
-# router_call = iosxerestapi(host='ios-xe-mgmt.cisco.com', username='root', password='D_Vay!_10&', port=9443)
 
 @main.command()
 @click.pass_obj
 def get_bgp(ctx):
-
-bgp = router_call.get_bgp()
-print(bgp)
+    bgp = ctx.set_up().get_bgp()
+    print(bgp)
 
 @main.command()
 @click.pass_obj
 def get_interfaces_oper(ctx):
-
-intf = router_call.get_interfaces_oper()
-print(intf)
+    intf = ctx.set_up().get_interfaces_oper()
+    print(intf)
 
 
 main()
