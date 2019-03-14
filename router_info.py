@@ -22,7 +22,7 @@ def main(ctx,ip, port, username, password):
     """Gather and Add IOS XE device information using restconf"""
 
     ctx.obj = User(ip,port, username, password)
-    click.secho("Getting information")
+    click.secho("Working....")
 
 
 @main.command()
@@ -43,7 +43,7 @@ def get_interfaces(ctx):
 @click.pass_obj
 def add_drop(ctx):
     """Add ACL to Interface """
-    intf = ctx.set_up().add_access_group()
-    print(intf)
+    access = ctx.set_up().add_access_group()
+    print(access)
 
 main()

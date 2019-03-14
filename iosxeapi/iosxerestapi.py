@@ -63,7 +63,7 @@ class iosxerestapi(object):
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.host)
 
-    def _execute_call(self, url, method='get'):
+    def _execute_call(self, url, method='get', data=None):
         try:
             self.logger.info('Calling {}'.format(url))
             requests.packages.urllib3.disable_warnings()
@@ -75,7 +75,7 @@ class iosxerestapi(object):
             if method == 'get':
                 response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
             if method == 'patch':
-                response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
+                response = requests.patch(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, payload=data)
 
             return response.json()
                 #response = requests.get(url, auth=(USER, PASS), headers=headers, verify=False)
@@ -128,7 +128,12 @@ class iosxerestapi(object):
 
     def add_access_group(self):
         """Function to create a IP accessgroup on IOS XE"""
-        access_group = (self._execute_call('Cisco-IOS-XE-native:native')).patch('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3')
+        # url = self._execute_call('Cisco-IOS-XE-native:native').patch('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3')
+        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/GigabitEthernet=3'.format(self.host, self.port)
+        headers = {
+        'Accept': 'application/yang-data+json',
+        'content-type': 'application/yang-data+json'
+        }
 
         data = {
         "Cisco-IOS-XE-native:GigabitEthernet":[
@@ -139,9 +144,7 @@ class iosxerestapi(object):
                        "in":{
                           "acl":{
                              "acl-name":"DROP",
-                             "in":[
-                                null
-                             ]
+                             "in":[None]
                           }
                        }
                     }
@@ -149,9 +152,5 @@ class iosxerestapi(object):
               }
            ]
         }
-
-    if result.status_code == 201:
-        return 0
-
-    print(result.status_code, response.text)
-    return -1
+        response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3', method='patch', data=json.dumps(data))
+        return response
