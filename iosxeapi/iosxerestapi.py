@@ -76,6 +76,8 @@ class iosxerestapi(object):
                 response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
             if method == 'patch':
                 response = requests.patch(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=data)
+            if method == 'delete':
+                response = requests.delete(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=data)
 
             return response.json()
                 #response = requests.get(url, auth=(USER, PASS), headers=headers, verify=False)
@@ -153,4 +155,16 @@ class iosxerestapi(object):
            ]
         }
         response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3', method='patch', data=json.dumps(data))
+        return response
+
+    def delete_access_group(self):
+        """Function to delete a IP accessgroup on IOS XE"""
+        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/GigabitEthernet=3/ip/access-group/in/acl'.format(self.host, self.port)
+        headers = {
+        'Accept': 'application/yang-data+json',
+        'content-type': 'application/yang-data+json'
+        }
+
+        data = {}
+        response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3/ip/access-group/in/acl', method='delete', data=json.dumps(data))
         return response

@@ -46,4 +46,11 @@ def add_drop(ctx):
     access = ctx.set_up().add_access_group()
     print(access)
 
+@main.command()
+@click.pass_obj
+def delete_drop(ctx):
+    """Add ACL to Interface """
+    delete = ctx.set_up().delete_access_group()
+    print(delete)
+
 main()
