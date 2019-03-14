@@ -74,6 +74,8 @@ class iosxerestapi(object):
             }
             if method == 'get':
                 response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
+            if method == 'patch':
+                response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
 
             return response.json()
                 #response = requests.get(url, auth=(USER, PASS), headers=headers, verify=False)
@@ -121,3 +123,29 @@ class iosxerestapi(object):
             interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces']['interface'].append(dict_temp)
 
         return json.dumps(interfaces_list, sort_keys=False, indent=4)
+
+    def add_access_group(self):
+        access_group = (self._execute_call(Cisco-IOS-XE-native:native)).patch('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3)
+
+        data = '''
+        {
+        "Cisco-IOS-XE-native:GigabitEthernet":[
+              {
+                 "name":"3",
+                 "ip":{
+                    "access-group":{
+                       "in":{
+                          "acl":{
+                             "acl-name":"DROP",
+                             "in":[
+                                null
+                             ]
+                          }
+                       }
+                    }
+                 }
+              }
+           ]
+        }
+
+        ```
