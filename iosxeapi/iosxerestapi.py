@@ -117,6 +117,8 @@ class iosxerestapi(object):
             dict_temp['ipv4'] = interface.get('ipv4')
             dict_temp['vrf'] = interface.get('vrf')
             dict_temp['admin-status'] = interface.get('admin-status')
+            dict_temp['input-security-acl'] = interface.get('input-security-acl')
+            dict_temp['output-security-acl'] = interface.get('output-security-acl')
             dict_temp['in-discards'] = interface.get('in-discards')
             dict_temp['in-errors'] = interface.get('in-errors')
             dict_temp['out-discards'] = interface.get('out-discards')
