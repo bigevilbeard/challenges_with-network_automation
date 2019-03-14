@@ -75,7 +75,7 @@ class iosxerestapi(object):
             if method == 'get':
                 response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
             if method == 'patch':
-                response = requests.patch(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, payload=data)
+                response = requests.patch(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=data)
 
             return response.json()
                 #response = requests.get(url, auth=(USER, PASS), headers=headers, verify=False)
