@@ -33,7 +33,7 @@ def get_bgp(ctx):
 
 @main.command()
 @click.pass_obj
-def get_interfaces_oper(ctx):
+def get_interfaces(ctx):
     intf = ctx.set_up().get_interfaces_oper()
     print(intf)
 
