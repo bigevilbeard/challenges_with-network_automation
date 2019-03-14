@@ -49,7 +49,7 @@ def add_drop(ctx):
 @main.command()
 @click.pass_obj
 def delete_drop(ctx):
-    """Add ACL to Interface """
+    """Remove ACL from Interface """
     delete = ctx.set_up().delete_access_group()
     print(delete)
 
