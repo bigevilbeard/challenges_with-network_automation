@@ -31,6 +31,7 @@ def get_bgp(ctx):
     """Gather BGP information"""
     bgp = ctx.set_up().get_bgp()
     print(bgp)
+    click.secho("Task completed")
 
 @main.command()
 @click.pass_obj
@@ -38,6 +39,7 @@ def get_interfaces(ctx):
     """Gather Interface information"""
     intf = ctx.set_up().get_interfaces_oper()
     print(intf)
+    click.secho("Task completed")
 
 @main.command()
 @click.pass_obj
@@ -45,6 +47,7 @@ def add_drop(ctx):
     """Add ACL to Interface """
     access = ctx.set_up().add_access_group()
     print(access)
+    click.secho("Task completed")
 
 @main.command()
 @click.pass_obj
@@ -52,5 +55,6 @@ def delete_drop(ctx):
     """Remove ACL from Interface """
     delete = ctx.set_up().delete_access_group()
     print(delete)
+    click.secho("Task completed")
 
 main()
