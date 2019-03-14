@@ -83,6 +83,7 @@ class iosxerestapi(object):
             self.logger.error(e)
 
     def get_bgp(self):
+        """Function to get BGP information on IOS XE"""
         neighbors_list = dict()
         neighbors_list['Cisco-IOS-XE-bgp-oper:bgp-state-data'] = {'neighbors':[]}
         neighbors = DictQuery(self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')).get('Cisco-IOS-XE-bgp-oper:bgp-state-data/neighbors/neighbor')
@@ -101,6 +102,7 @@ class iosxerestapi(object):
 
 
     def get_interfaces_oper(self):
+        """Function to get interface information on IOS XE"""
         # return self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
         interfaces_list = dict()
         interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces'] = {'interface':[]}
@@ -125,10 +127,10 @@ class iosxerestapi(object):
         return json.dumps(interfaces_list, sort_keys=False, indent=4)
 
     def add_access_group(self):
-        access_group = (self._execute_call(Cisco-IOS-XE-native:native)).patch('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3)
+        """Function to create a IP accessgroup on IOS XE"""
+        access_group = (self._execute_call('Cisco-IOS-XE-native:native')).patch('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3')
 
-        data = '''
-        {
+        data = {
         "Cisco-IOS-XE-native:GigabitEthernet":[
               {
                  "name":"3",
@@ -148,4 +150,8 @@ class iosxerestapi(object):
            ]
         }
 
-        ```
+    if result.status_code == 201:
+        return 0
+
+    print(result.status_code, response.text)
+    return -1
