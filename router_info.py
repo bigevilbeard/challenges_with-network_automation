@@ -57,7 +57,11 @@ def add_drop(ctx):
 @click.pass_obj
 def delete_drop(ctx):
     """Remove ACL from Interface """
-    delete = ctx.set_up().delete_access_group()
+    click.secho("Select Interface!")
+    router_object = ctx.set_up()
+    list_interfaces = router_object.get_interfaces_list()
+    user_interface = click.prompt('Available Interfaces Are:\n' + list_interfaces)
+    delete = router_object.delete_access_group(user_interface)
     print(delete.message)
     click.secho("Task completed")
 

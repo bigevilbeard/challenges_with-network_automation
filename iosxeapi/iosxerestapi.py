@@ -195,10 +195,11 @@ class iosxerestapi(object):
 
     def add_access_group(self, interface):
         """Function to create a IP accessgroup on IOS XE"""
-        parsed_interface =re.search(r"(?P<intrfname>[A-Za-z]+)(?P<intf_num>\d+((/\d+)+(\.\d+)?))",interface).groupdict()
+        parsed_interface =re.search(r"(?P<intrfname>[A-Za-z]+)(?P<intf_num>\d((/\d+)+(\.\d+)?)|\d)",interface).groupdict()
         interface_name = parsed_interface.get('intrfname')
         interface_number = parsed_interface.get('intf_num')
-        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/{2}={3}'.format(self.host, self.port, interface_name, interface_number)
+        api_interface = '{0}={1}'.format(interface_name, interface_number)
+        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/{2}'.format(self.host, self.port, api_interface)
         headers = {
         'Accept': 'application/yang-data+json',
         'content-type': 'application/yang-data+json'
@@ -207,7 +208,7 @@ class iosxerestapi(object):
         data = {
         "Cisco-IOS-XE-native:GigabitEthernet":[
               {
-                 "name":"3",
+                 "name":interface_number,
                  "ip":{
                     "access-group":{
                        "in":{
@@ -222,17 +223,21 @@ class iosxerestapi(object):
            ]
         }
 
-        response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3', method='patch', data=data)
+        response = self._execute_call('Cisco-IOS-XE-native:native/interface/{0}'.format(api_interface), method='patch', data=data)
         return response
 
-    def delete_access_group(self):
+    def delete_access_group(self, interface):
         """Function to delete a IP accessgroup on IOS XE"""
-        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/GigabitEthernet=3/ip/access-group/in/acl'.format(self.host, self.port)
+        parsed_interface =re.search(r"(?P<intrfname>[A-Za-z]+)(?P<intf_num>\d((/\d+)+(\.\d+)?)|\d)",interface).groupdict()
+        interface_name = parsed_interface.get('intrfname')
+        interface_number = parsed_interface.get('intf_num')
+        api_interface = '{0}={1}'.format(interface_name, interface_number)
+        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/{2}/ip/access-group/in/acl'.format(self.host, self.port, api_interface)
         headers = {
         'Accept': 'application/yang-data+json',
         'content-type': 'application/yang-data+json'
         }
 
         data = {}
-        response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3/ip/access-group/in/acl', method='delete', data=json.dumps(data))
+        response = self._execute_call('Cisco-IOS-XE-native:native/interface/{0}/ip/access-group/in/acl'.format(api_interface), method='delete', data=json.dumps(data))
         return response
