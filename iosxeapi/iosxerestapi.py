@@ -33,7 +33,7 @@ config = {
     },
     'handlers': {
         'console': {
-            'level': 'INFO',
+            'level': 'ERROR',
             'formatter': 'short',
             'class': 'logging.StreamHandler',
         },
