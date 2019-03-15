@@ -2,6 +2,7 @@ import requests
 import urllib3
 import logging.config
 import json
+import re
 
 HTTP_SUCCESS_CODES = {
     200: 'OK',
@@ -126,9 +127,9 @@ class iosxerestapi(object):
 
             if not response.status_code == 204:
                 result.json = response.json()
-            
+
             return result
-            
+
                 #response = requests.get(url, auth=(USER, PASS), headers=headers, verify=False)
         except Exception as e:
             self.logger.error(e)
@@ -181,10 +182,23 @@ class iosxerestapi(object):
 
         return json.dumps(interfaces_list, sort_keys=False, indent=4)
 
-    def add_access_group(self):
+    def get_interfaces_list(self):
+        """Function to get interface information on IOS XE"""
+        interfaces_list = str()
+        api_data = self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
+        interfaces = DictQuery(api_data.json).get('Cisco-IOS-XE-interfaces-oper:interfaces/interface')
+
+        for interface in interfaces:
+            interfaces_list = interfaces_list + interface.get('name') + '\n'
+
+        return interfaces_list
+
+    def add_access_group(self, interface):
         """Function to create a IP accessgroup on IOS XE"""
-        # url = self._execute_call('Cisco-IOS-XE-native:native').patch('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3')
-        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/GigabitEthernet=3'.format(self.host, self.port)
+        parsed_interface =re.search(r"(?P<intrfname>[A-Za-z]+)(?P<intf_num>\d+((/\d+)+(\.\d+)?))",interface).groupdict()
+        interface_name = parsed_interface.get('intrfname')
+        interface_number = parsed_interface.get('intf_num')
+        url = 'https://{0}:{1}/data/Cisco-IOS-XE-native:native/interface/{2}={3}'.format(self.host, self.port, interface_name, interface_number)
         headers = {
         'Accept': 'application/yang-data+json',
         'content-type': 'application/yang-data+json'

@@ -45,7 +45,11 @@ def get_interfaces(ctx):
 @click.pass_obj
 def add_drop(ctx):
     """Add ACL to Interface """
-    access = ctx.set_up().add_access_group()
+    click.secho("Select Interface!")
+    router_object = ctx.set_up()
+    list_interfaces = router_object.get_interfaces_list()
+    user_interface = click.prompt('Available Interfaces Are:\n' + list_interfaces)
+    access = router_object.add_access_group(user_interface)
     print(access.message)
     click.secho("Task completed")
 
