@@ -3,6 +3,25 @@ import urllib3
 import logging.config
 import json
 
+HTTP_SUCCESS_CODES = {
+    200: 'OK',
+    201: 'Created',
+    202: 'Accepted',
+    204: 'Accepted but with no JSON body',
+}
+
+HTTP_ERROR_CODES = {
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    404: 'Not Found',
+    405: 'Method not Allowed',
+}
+
+HTTP_SERVER_ERRORS = {
+    500: 'Internal Server Error',
+    503: 'Service Unavailable',
+}
+
 config = {
     'disable_existing_loggers': False,
     'version': 1,
@@ -32,6 +51,17 @@ config = {
 }
 
 logging.config.dictConfig(config)
+
+class Result(object):
+    def __init__(self,
+                 ok=False, response=None, status_code=None,
+                 error=None, message=None, json=None):
+        self.ok = ok
+        self.response = response
+        self.status_code = status_code
+        self.error = error
+        self.message = message
+        self.json = json
 
 class DictQuery(dict):
     def get(self, path, default = None):
@@ -74,12 +104,31 @@ class iosxerestapi(object):
             }
             if method == 'get':
                 response = requests.get(url_base+url, auth=(self.username, self.password), headers=headers, verify=False)
-            if method == 'patch':
-                response = requests.patch(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=data)
-            if method == 'delete':
-                response = requests.delete(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=data)
+            elif method == 'patch':
+                response = requests.patch(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=json.dumps(data, ensure_ascii=False))
+            elif method == 'delete':
+                response = requests.delete(url_base+url, auth=(self.username, self.password), headers=headers, verify=False, data=json.dumps(data, ensure_ascii=False))
 
-            return response.json()
+            result = Result(response=response)
+            result.status_code = response.status_code
+
+            if response.status_code in HTTP_ERROR_CODES:
+                result.ok = False
+                result.error = HTTP_ERROR_CODES[response.status_code]
+
+            elif response.status_code in HTTP_SERVER_ERRORS:
+                result.ok = False
+                result.error = HTTP_SERVER_ERRORS[response.status_code]
+
+            elif response.status_code in HTTP_SUCCESS_CODES:
+                result.ok = True
+                result.message = HTTP_SUCCESS_CODES[response.status_code]
+
+            if not response.status_code == 204:
+                result.json = response.json()
+            
+            return result
+            
                 #response = requests.get(url, auth=(USER, PASS), headers=headers, verify=False)
         except Exception as e:
             self.logger.error(e)
@@ -88,9 +137,10 @@ class iosxerestapi(object):
         """Function to get BGP information on IOS XE"""
         neighbors_list = dict()
         neighbors_list['Cisco-IOS-XE-bgp-oper:bgp-state-data'] = {'neighbors':[]}
-        neighbors = DictQuery(self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')).get('Cisco-IOS-XE-bgp-oper:bgp-state-data/neighbors/neighbor')
-        # return neighbors
-        # return self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')
+        api_data = self._execute_call('Cisco-IOS-XE-bgp-oper:bgp-state-data')
+        neighbors = DictQuery(api_data.json).get(
+            'Cisco-IOS-XE-bgp-oper:bgp-state-data/neighbors/neighbor')
+
         for neighbor in neighbors:
             dict_temp = {}
             dict_temp['neighbor-id'] = neighbor.get('neighbor-id',None)
@@ -108,7 +158,8 @@ class iosxerestapi(object):
         # return self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
         interfaces_list = dict()
         interfaces_list['Cisco-IOS-XE-interfaces-oper:interfaces'] = {'interface':[]}
-        interfaces = DictQuery(self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')).get('Cisco-IOS-XE-interfaces-oper:interfaces/interface')
+        api_data = self._execute_call('Cisco-IOS-XE-interfaces-oper:interfaces')
+        interfaces = DictQuery(api_data.json).get('Cisco-IOS-XE-interfaces-oper:interfaces/interface')
 
         for interface in interfaces:
             dict_temp = {}
@@ -156,7 +207,8 @@ class iosxerestapi(object):
               }
            ]
         }
-        response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3', method='patch', data=json.dumps(data))
+
+        response = self._execute_call('Cisco-IOS-XE-native:native/interface/GigabitEthernet=3', method='patch', data=data)
         return response
 
     def delete_access_group(self):

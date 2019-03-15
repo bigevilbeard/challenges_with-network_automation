@@ -46,7 +46,7 @@ def get_interfaces(ctx):
 def add_drop(ctx):
     """Add ACL to Interface """
     access = ctx.set_up().add_access_group()
-    print(access)
+    print(access.message)
     click.secho("Task completed")
 
 @main.command()
@@ -54,7 +54,7 @@ def add_drop(ctx):
 def delete_drop(ctx):
     """Remove ACL from Interface """
     delete = ctx.set_up().delete_access_group()
-    print(delete)
+    print(delete.message)
     click.secho("Task completed")
 
 main()
