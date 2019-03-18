@@ -26,6 +26,10 @@ Follow these steps to create and activate a venv.
 virtualenv venv --python=python3.6
 source venv/bin/activate
 ```
+## Install the code requirements
+```
+pip install -r requirements
+```
 
 ## Reservation Setup
 This lesson leverages a specific [VIRL](https://github.com/bigevilbeard/challenges_with-network_automation/blob/master/topology.virl) topology. Before beginning this lesson run the following command to reconfigure the Sandbox with the proper topology.
@@ -71,6 +75,39 @@ Here is a list of all the running nodes
 ├───────────┼──────────┼─────────┼─────────────┼────────────┼──────────────────────┼────────────────────┤
 │ ~mgmt-lxc │ mgmt-lxc │ ACTIVE  │ REACHABLE   │ ssh        │ 172.16.30.87         │ 172.16.30.88       │
 ╘═══════════╧══════════╧═════════╧═════════════╧════════════╧══════════════════════╧════════════════════╛
+```
+
+## Running the code examples
+
+Configure an HTTP-based protocol-Representational State Transfer Configuration Protocol (RESTCONF). RESTCONF provides a programmatic interface based on standard mechanisms for accessing configuration data, state data, data-model-specific Remote Procedure Call (RPC) operations and events defined in the YANG model.This code is using yang model for IOS-XE - models that are specific to IOS-XE platforms.
+
+- `get_bgp.py` - Passes static configuration IP Address/Port/User/Password and will get all device BGP information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
+- `get_interfaces.py` - Passes static configuration IP Address/Port/User/Password and will get all device interface information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
+
+- `router_info.py` - This code uses Object-Oriented Programming (OOP). This is a programming paradigm where different components of a computer program are modeled after real-world objects. An object is anything that has some characteristics and can perform a function. All args used in the running of the code is using [CLICK](https://click.palletsprojects.com/en/7.x/). Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
+
+In this code we can again show the router bgp and interface  information (shown in `json` format), we can also add an access list to an interface with the `patch` and `delete`. As with RESTCONF we can use Methods. Methods are `HTTPS` operations _`(GET/PATCH/POST/DELETE/OPTIONS/PUT)`_ performed on a target resource.
+
+Use the `--help` to see the Options and Commands
+
+```
+(venv) STUACLAR-M-R6EU:challenges_with-network_automation stuaclar$ python router_info.py --help
+Usage: router_info.py [OPTIONS] COMMAND [ARGS]...
+
+  Gather and Add IOS XE device information using restconf
+
+Options:
+  --ip TEXT        ip address of device
+  --port TEXT      device port
+  --username TEXT  Device username
+  --password TEXT  Device password
+  --help           Show this message and exit.
+
+Commands:
+  add_drop        Add ACL to Interface
+  delete_drop     Remove ACL from Interface
+  get_bgp         Gather BGP information
+  get_interfaces  Gather Interface information
 ```
 
 ## About me
