@@ -53,6 +53,11 @@ line con 0
 !
 restconf
 !
+interface VirtualPortGroup0
+ ip address 10.1.1.1 255.255.255.0
+ no mop enabled
+ no mop sysid
+!
 interface GigabitEthernet1
   description OOB Management
   vrf forwarding Mgmt-intf
@@ -90,6 +95,19 @@ ip sla 3
 ip sla schedule 3 life forever start-time now
 !
 ip route vrf Mgmt-intf 0.0.0.0 0.0.0.0 {{ gateway }}
+!
+event manager applet bgp-check
+ event syslog pattern "TRACK-6-STATE"
+ action 1.0 cli command "enable"
+ action 2.0 cli command "guestshell run python /home/guestshell/bgp_down.py --syslog"
+ action 3.0 regexp "ERROR" "$_cli_result"
+ action 4.0 if $_regexp_result eq "1"
+ action 5.0  syslog msg "$_cli_result"
+ action 6.0 end
+!
+app-hosting appid guestshell
+ app-vnic gateway0 virtualportgroup 0 guest-interface 0
+  guest-ipaddress 10.1.1.2 netmask 255.255.255.0
 !
 end
 

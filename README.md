@@ -109,6 +109,67 @@ Commands:
   get_bgp         Gather BGP information
   get_interfaces  Gather Interface information
 ```
+## Guest Shell on CE-1
+
+```
+host-CE-1(config)#iox
+host-CE-1(config)#
+*Mar 21 10:56:58.177: %UICFGEXP-6-SERVER_NOTIFIED_START: R0/0: psd: Server iox has been notified to start
+host-CE-1(config)#end
+```
+Confirm IOX is Running
+
+```
+host-CE-1#sh iox
+Virtual Service Global State and Virtualization Limits:
+
+Infrastructure version : 1.7
+Total virtual services installed : 0
+Total virtual services activated : 0
+
+Machine types supported   : KVM, LXC
+Machine types disabled    : none
+
+Maximum VCPUs per virtual service : 0
+Resource virtualization limits:
+Name                         Quota     Committed     Available
+--------------------------------------------------------------
+system CPU (%)                   7             0             7
+memory (MB)                   1024             0           882
+bootflash (MB)               20000             0          6719
+
+
+IOx Infrastructure Summary:
+---------------------------
+IOx service (CAF)    : Running
+IOx service (HA)     : Not Running
+IOx service (IOxman) : Running
+Libvirtd             : Running
+```
+Enable Guest Shell
+```
+host-CE-1#guestshell enable
+Interface will be selected if configured in app-hosting
+Please wait for completion
+....
+
+```
+
+## Add the python script via bash
+
+```
+host-CE-1#guestshell run bash
+[guestshell@guestshell ~]$touch bgp_down.py
+[guestshell@guestshell ~]$ vi bgp_down.py
+<esc>, i
+import sys
+import cli
+
+
+print "\n\n *** Shutting Down BGP Session  *** \n\n"
+cli.configurep(["router bgp 100","neighbor 10.1.2.2 shutdown", "end"])
+<esc>, wq
+```
 
 ## About me
 

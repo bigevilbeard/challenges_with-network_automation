@@ -10,10 +10,10 @@ from tabulate import tabulate
 # USER = 'cisco'
 # PASS = 'cisco'
 
-HOST = 'ios-xe-mgmt.cisco.com'
-PORT = '9443'
-USER = 'root'
-PASS = 'D_Vay!_10&'
+# HOST = 'ios-xe-mgmt.cisco.com'
+# PORT = '9443'
+# USER = 'root'
+# PASS = 'D_Vay!_10&'
 
 
 
