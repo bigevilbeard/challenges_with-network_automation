@@ -48,7 +48,7 @@ virl up
 # Monitor status of simulation
 virl nodes   # Node startup
 ```
-Once the VIRL simulation is built the follow will be seen.
+Once the VIRL simulation is built, the following will be seen.
 ```
 (venv) [developer@devbox challenges_with-network_automation]$virl ls
 Running Simulations
@@ -79,14 +79,14 @@ Here is a list of all the running nodes
 
 ## Running the code examples
 
-Configure an HTTP-based protocol-Representational State Transfer Configuration Protocol (RESTCONF). RESTCONF provides a programmatic interface based on standard mechanisms for accessing configuration data, state data, data-model-specific Remote Procedure Call (RPC) operations and events defined in the YANG model.This code is using yang model for IOS-XE - models that are specific to IOS-XE platforms.
+Configuration is done using the Representational State Transfer Configuration Protocol (RESTCONF). RESTCONF is an HTTP based protocol. It provides a programmatic interface based on standard mechanisms for accessing configuration data, state data, data-model-specific Remote Procedure Call (RPC) operations and events defined in a YANG model. This code is using native YANG models for IOS-XE - models that are specific to IOS-XE platforms.
 
 - `get_bgp.py` - Passes static configuration IP Address/Port/User/Password and will get all device BGP information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
 - `get_interfaces.py` - Passes static configuration IP Address/Port/User/Password and will get all device interface information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
 
-- `router_info.py` - This code uses Object-Oriented Programming (OOP). This is a programming paradigm where different components of a computer program are modeled after real-world objects. An object is anything that has some characteristics and can perform a function. All args used in the running of the code is using [CLICK](https://click.palletsprojects.com/en/7.x/). Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
+- `router_info.py` - This code uses Object-Oriented Programming (OOP). This is a programming paradigm where different components of a computer program are modeled after real-world objects. An object is anything that has some characteristics and can perform a function. All args used in the running of the code are handled using [CLICK](https://click.palletsprojects.com/en/7.x/). Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
 
-In this code we can again show the router bgp and interface  information (shown in `json` format), we can also add an access list to an interface with the `patch` and `delete`. As with RESTCONF we can use Methods. Methods are `HTTPS` operations _`(GET/PATCH/POST/DELETE/OPTIONS/PUT)`_ performed on a target resource.
+In this code, we can show the router BGP and interface information (shown in `json` format). We can also add an access list to an interface with the `patch` and `delete`. As with REST, with RESTCONF we can use Methods. Methods are `HTTPS` operations _`(GET/PATCH/POST/DELETE/OPTIONS/PUT)`_ performed on a target resource.
 
 Use the `--help` to see the Options and Commands
 
