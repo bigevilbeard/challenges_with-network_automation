@@ -13,10 +13,14 @@ class User(object):
         return iosxerestapi(host=self.ip, username=self.username, password=self.password, port=self.port)
 
 @click.group()
+# @click.option("--ip", type=click.Choice(["ipaddr", "file"]))
 @click.option("--ip",help="ip address of device")
-@click.option("--port",help="device port")
-@click.option("--username",help="Device username")
-@click.option("--password",help="Device password")
+# @click.option("--port",help="Device port")
+@click.option("--port", default=443, help="Device port, default 443" )
+# @click.option("--username",help="Device username")
+# @click.option("--password",help="Device password")
+@click.option("--username",help="Device username", prompt=True, hide_input=False)
+@click.option("--password",help="Device password", prompt=True, hide_input=True)
 @click.pass_context
 def main(ctx,ip, port, username, password):
     """Gather and Add IOS XE device information using restconf"""
