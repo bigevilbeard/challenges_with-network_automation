@@ -83,6 +83,7 @@ Configuration is done using the Representational State Transfer Configuration Pr
 
 - `get_bgp.py` - Passes static configuration IP Address/Port/User/Password and will get all device BGP information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
 - `get_interfaces.py` - Passes static configuration IP Address/Port/User/Password and will get all device interface information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
+- `get_device.py` - Passes static configuration IP Address/Port/User/Password and will get device hostname and version information. Results are printed using [Tabulate](https://pypi.org/project/tabulate/)
 
 - `router_info.py` - This code uses Object-Oriented Programming (OOP). This is a programming paradigm where different components of a computer program are modeled after real-world objects. An object is anything that has some characteristics and can perform a function. All args used in the running of the code are handled using [CLICK](https://click.palletsprojects.com/en/7.x/). Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
 
@@ -98,7 +99,7 @@ Usage: router_info.py [OPTIONS] COMMAND [ARGS]...
 
 Options:
   --ip TEXT        ip address of device
-  --port TEXT      device port
+  --port INTEGER   Device port, default 443
   --username TEXT  Device username
   --password TEXT  Device password
   --help           Show this message and exit.
@@ -107,6 +108,7 @@ Commands:
   add_drop        Add ACL to Interface
   delete_drop     Remove ACL from Interface
   get_bgp         Gather BGP information
+  get_device      Gather Device information
   get_interfaces  Gather Interface information
 ```
 ## Guest Shell on CE-1
