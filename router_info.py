@@ -43,6 +43,14 @@ def get_interfaces(ctx):
 
 @main.command()
 @click.pass_obj
+def get_device(ctx):
+    """Gather Device information"""
+    dev = ctx.set_up().get_device()
+    print(dev)
+    click.secho("Task completed")
+
+@main.command()
+@click.pass_obj
 def add_drop(ctx):
     """Add ACL to Interface """
     click.secho("Select Interface!")

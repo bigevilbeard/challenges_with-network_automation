@@ -19,8 +19,8 @@ from tabulate import tabulate
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def get_bgp():
-    url = "https://{h}:{p}/restconf/data/Cisco-IOS-XE-bgp-oper:bgp-state-data".format(h=HOST, p=PORT)
+def get_info():
+    url = "https://{h}:{p}/restconf/data/Cisco-IOS-XE-native:native".format(h=HOST, p=PORT)
     headers = {'Content-Type': 'application/yang-data+json',
                'Accept': 'application/yang-data+json'}
 
@@ -29,24 +29,16 @@ def get_bgp():
     # print(response)
 
 def main():
-    neighbors = get_bgp()
-    print(neighbors)
+    system = get_info().get("Cisco-IOS-XE-native:native")
+    # print(system)
 
-    headers = ["Neighbor",
-    "LINK",
-    "UP-TIME",
-    "STATE",
-    "PfxRcd" ]
+    headers = ["Hostname",
+    "Version"]
     table = list()
 
-    for item in neighbors['Cisco-IOS-XE-bgp-oper:bgp-state-data']['neighbors']['neighbor']:
-        tr = [item['neighbor-id'],
-        item['link'],
-        item['up-time'],
-        item['connection']['state'],
-        item['prefix-activity']['received']['total-prefixes']]
-        table.append(tr)
-        # print(tr)
+    hostname = system.get('hostname')
+    version = system.get('version')
+    table.append((hostname, version))
 
     print(tabulate(table, headers, tablefmt="fancy_grid"))
 

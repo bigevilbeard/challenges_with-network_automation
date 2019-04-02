@@ -153,6 +153,28 @@ class iosxerestapi(object):
 
         return json.dumps(neighbors_list, sort_keys=False, indent=4)
 
+    def get_device(self):
+        """Function to get Device information on IOS XE"""
+        device_list = dict()
+        # device_list['Cisco-IOS-XE-native:native'] = {'device':[]}
+        api_data = self._execute_call('Cisco-IOS-XE-native:native')
+        device = DictQuery(api_data.json).get(
+            'Cisco-IOS-XE-native:native')
+
+        # print(system)
+
+        hostname = device.get('hostname')
+        version = device.get('version')
+
+        dict_temp = dict()
+        dict_temp['hostname'] = hostname
+        dict_temp['version'] = version
+        device_list['Cisco-IOS-XE-native:native'] = dict()
+        device_list['Cisco-IOS-XE-native:native']['device'] = dict_temp
+
+
+        return json.dumps(device_list, sort_keys=False, indent=4)
+
 
     def get_interfaces_oper(self):
         """Function to get interface information on IOS XE"""
