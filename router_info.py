@@ -1,6 +1,7 @@
 from iosxeapi.iosxerestapi import iosxerestapi
 from pprint import pprint
 import click
+import json
 
 
 class User(object):
@@ -15,6 +16,7 @@ class User(object):
 @click.group()
 # @click.option("--ip", type=click.Choice(["ipaddr", "file"]))
 @click.option("--ip",help="ip address of device")
+@click.option("--file",help="file ip addresses of devices")
 # @click.option("--port",help="Device port")
 @click.option("--port", default=443, help="Device port, default 443" )
 # @click.option("--username",help="Device username")
@@ -22,11 +24,20 @@ class User(object):
 @click.option("--username",help="Device username", prompt=True, hide_input=False)
 @click.option("--password",help="Device password", prompt=True, hide_input=True)
 @click.pass_context
-def main(ctx,ip, port, username, password):
+def main(ctx,ip, file, port, username, password):
     """Gather and Add IOS XE device information using restconf"""
-
-    ctx.obj = User(ip,port, username, password)
-    click.secho("Working....")
+    if ip:
+        ctx.obj = User(ip,port, username, password)
+        click.secho("Working....")
+    else:
+        try:
+            with open(file) as f:
+                device_data = json.load(f)
+        except (ValueError, IOError, OSError) as err:
+            print("Could not read the 'devices' file:", err)
+        for ip in device_data.values():
+            ctx.obj = User(ip['IP'],port, username, password)
+            click.secho("Working....")
 
 
 @main.command()
