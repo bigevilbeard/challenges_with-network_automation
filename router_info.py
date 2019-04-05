@@ -1,10 +1,9 @@
 from iosxeapi.iosxerestapi import iosxerestapi
-
 import click
 import json
 
 
-class User(object):
+class Device(object):
     def __init__(self, ip=None, port=None, username=None, password=None):
         self.ip = ip
         self.port = port
@@ -24,10 +23,14 @@ class User(object):
 @click.option("--username",help="device username", prompt=True, hide_input=False)
 @click.option("--password",help="device password", prompt=True, hide_input=True)
 @click.pass_context
-def main(ctx,ip, file, port, username, password):
+
+
+def main(ctx, ip, file, port, username, password):
     """Gather and Add IOS XE device information using restconf"""
+    devices = []
     if ip:
-        ctx.obj = User(ip,port, username, password)
+        device = Device(ip, port, username, password)
+        devices.append(device)
         click.secho("Working....")
     else:
         try:
@@ -35,63 +38,71 @@ def main(ctx,ip, file, port, username, password):
                 device_data = json.load(f)
         except (ValueError, IOError, OSError) as err:
             print("Could not read the 'devices' file:", err)
-        for ip in device_data.values():
-            ctx.obj = dict()
 
-            ctx.obj[ip['IP']] = User(ip['IP'],port, username, password)
-            print(len(ctx.obj))
-            click.secho("Working....{}".format(ip['IP']))
+        for device_info in device_data.values():
+            ip = device_info['IP']
+            device = Device(device_info['IP'], port, username, password)
+            devices.append(device)
+            click.secho("Working....{}".format(ip))
+    ctx.obj = devices
 
 
-@main.command()
+@main.command('get_device')
 @click.pass_obj
-def get_bgp(ctx):
-    """Gather BGP information"""
-    bgp = ctx.set_up().get_bgp()
-    print(bgp)
-    click.secho("Task completed")
-
-@main.command()
-@click.pass_obj
-def get_interfaces(ctx):
-    """Gather Interface information"""
-    intf = ctx.set_up().get_interfaces_oper()
-    print(intf)
-    click.secho("Task completed")
-
-# @main.command()
-@click.Command(context_settings=None)
-@click.pass_obj
-def get_device(ctx):
+def get_device(devices):
     """Gather Device information"""
-    for object in ctx.values():
-        print(len(ctx))
-        dev = object.set_up().get_device()
-        print(dev)
-    click.secho("Task completed")
+    for device in devices:
+        api = device.set_up()
+        result = api.get_device()
+        print(result)
+        click.secho("Task completed")
 
-@main.command()
+
+@main.command('get_bgp')
 @click.pass_obj
-def add_drop(ctx):
+def get_bgp(devices):
+    """Gather BGP information"""
+    for device in devices:
+        api = device.set_up()
+        result = api.get_bgp()
+        print(result)
+        click.secho("Task completed")
+
+
+@main.command('get_interfaces')
+@click.pass_obj
+def get_interfaces(devices):
+    """Gather Interface information"""
+    for device in devices:
+        api = device.set_up()
+        result = api.get_interfaces_oper()
+        print(result)
+        click.secho("Task completed")
+
+@main.command('add_drop')
+@click.pass_obj
+def add_drop(devices):
     """Add ACL to Interface """
-    click.secho("Select Interface!")
-    router_object = ctx.set_up()
-    list_interfaces = router_object.get_interfaces_list()
-    user_interface = click.prompt('Available Interfaces Are:\n' + list_interfaces)
-    access = router_object.add_access_group(user_interface)
-    print(access.message)
-    click.secho("Task completed")
+    for device in devices:
+        click.secho("Select Interface!")
+        router_object = device.set_up()
+        list_interfaces = router_object.get_interfaces_list()
+        user_interface = click.prompt('Available Interfaces Are:\n' + list_interfaces)
+        access = router_object.add_access_group(user_interface)
+        print(access.message)
+        click.secho("Task completed")
 
-@main.command()
+@main.command('delete_drop')
 @click.pass_obj
-def delete_drop(ctx):
+def delete_drop(devices):
     """Remove ACL from Interface """
-    click.secho("Select Interface!")
-    router_object = ctx.set_up()
-    list_interfaces = router_object.get_interfaces_list()
-    user_interface = click.prompt('Available Interfaces Are:\n' + list_interfaces)
-    delete = router_object.delete_access_group(user_interface)
-    print(delete.message)
-    click.secho("Task completed")
+    for device in devices:
+        click.secho("Select Interface!")
+        router_object = device.set_up()
+        list_interfaces = router_object.get_interfaces_list()
+        user_interface = click.prompt('Available Interfaces Are:\n' + list_interfaces)
+        delete = router_object.delete_access_group(user_interface)
+        print(delete.message)
+        click.secho("Task completed")
 
 main()
