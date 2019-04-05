@@ -1,5 +1,5 @@
 from iosxeapi.iosxerestapi import iosxerestapi
-from pprint import pprint
+
 import click
 import json
 
@@ -14,15 +14,15 @@ class User(object):
         return iosxerestapi(host=self.ip, username=self.username, password=self.password, port=self.port)
 
 @click.group()
-# @click.option("--ip", type=click.Choice(["ipaddr", "file"]))
-@click.option("--ip",help="ip address of device")
+# ip addresses or dns of devices
+@click.option("--ip",help="ip or dns address of device")
+# file of ip addresseses or dns of devices
 @click.option("--file",help="file ip addresses of devices")
-# @click.option("--port",help="Device port")
-@click.option("--port", default=443, help="Device port, default 443" )
-# @click.option("--username",help="Device username")
-# @click.option("--password",help="Device password")
-@click.option("--username",help="Device username", prompt=True, hide_input=False)
-@click.option("--password",help="Device password", prompt=True, hide_input=True)
+# option for custom port or uses restconf port 443
+@click.option("--port", default=443, help="device port, default = 443" )
+# prompts user for name/password of device(s)
+@click.option("--username",help="device username", prompt=True, hide_input=False)
+@click.option("--password",help="device password", prompt=True, hide_input=True)
 @click.pass_context
 def main(ctx,ip, file, port, username, password):
     """Gather and Add IOS XE device information using restconf"""
@@ -36,8 +36,11 @@ def main(ctx,ip, file, port, username, password):
         except (ValueError, IOError, OSError) as err:
             print("Could not read the 'devices' file:", err)
         for ip in device_data.values():
-            ctx.obj = User(ip['IP'],port, username, password)
-            click.secho("Working....")
+            ctx.obj = dict()
+
+            ctx.obj[ip['IP']] = User(ip['IP'],port, username, password)
+            print(len(ctx.obj))
+            click.secho("Working....{}".format(ip['IP']))
 
 
 @main.command()
@@ -56,12 +59,15 @@ def get_interfaces(ctx):
     print(intf)
     click.secho("Task completed")
 
-@main.command()
+# @main.command()
+@click.Command(context_settings=None)
 @click.pass_obj
 def get_device(ctx):
     """Gather Device information"""
-    dev = ctx.set_up().get_device()
-    print(dev)
+    for object in ctx.values():
+        print(len(ctx))
+        dev = object.set_up().get_device()
+        print(dev)
     click.secho("Task completed")
 
 @main.command()
