@@ -87,7 +87,7 @@ Configuration is done using the Representational State Transfer Configuration Pr
 
 - `router_info.py` - This code uses Object-Oriented Programming (OOP). This is a programming paradigm where different components of a computer program are modeled after real-world objects. An object is anything that has some characteristics and can perform a function. All args used in the running of the code are handled using [CLICK](https://click.palletsprojects.com/en/7.x/). Click is a Python package for creating beautiful command line interfaces in a composable way with as little code as necessary.
 
-In this code, we can show the router BGP and interface information (shown in `json` format). We can also add an access list to an interface with the `patch` and `delete`. As with REST, with RESTCONF we can use Methods. Methods are `HTTPS` operations _`(GET/PATCH/POST/DELETE/OPTIONS/PUT)`_ performed on a target resource.
+In this code, we can show the router BGP and interface information (shown in `json` format). We can also add an access list to an interface with the `patch` and `delete`. As with REST, with RESTCONF we can use Methods. Methods are `HTTPS` operations _`(GET/PATCH/POST/DELETE/OPTIONS/PUT)`_ performed on a target resource. Use either a single IP or update the `JSON` file with devices IP addresses.
 
 Use the `--help` to see the Options and Commands
 
@@ -98,10 +98,11 @@ Usage: router_info.py [OPTIONS] COMMAND [ARGS]...
   Gather and Add IOS XE device information using restconf
 
 Options:
-  --ip TEXT        ip address of device
-  --port INTEGER   Device port, default 443
-  --username TEXT  Device username
-  --password TEXT  Device password
+  --ip TEXT        ip or dns address of device
+  --file TEXT      file ip addresses of devices
+  --port INTEGER   device port, default = 443
+  --username TEXT  device username
+  --password TEXT  device password
   --help           Show this message and exit.
 
 Commands:
@@ -111,66 +112,26 @@ Commands:
   get_device      Gather Device information
   get_interfaces  Gather Interface information
 ```
-## Guest Shell on CE-1
+
+## Example Use Commands
+
+- `python router_info.py --ip 172.16.30.62 get_interfaces`
+- `python router_info.py --file routers.json get_device`
 
 ```
-host-CE-1(config)#iox
-host-CE-1(config)#
-*Mar 21 10:56:58.177: %UICFGEXP-6-SERVER_NOTIFIED_START: R0/0: psd: Server iox has been notified to start
-host-CE-1(config)#end
-```
-Confirm IOX is Running
-
-```
-host-CE-1#sh iox
-Virtual Service Global State and Virtualization Limits:
-
-Infrastructure version : 1.7
-Total virtual services installed : 0
-Total virtual services activated : 0
-
-Machine types supported   : KVM, LXC
-Machine types disabled    : none
-
-Maximum VCPUs per virtual service : 0
-Resource virtualization limits:
-Name                         Quota     Committed     Available
---------------------------------------------------------------
-system CPU (%)                   7             0             7
-memory (MB)                   1024             0           882
-bootflash (MB)               20000             0          6719
-
-
-IOx Infrastructure Summary:
----------------------------
-IOx service (CAF)    : Running
-IOx service (HA)     : Not Running
-IOx service (IOxman) : Running
-Libvirtd             : Running
-```
-Enable Guest Shell
-```
-host-CE-1#guestshell enable
-Interface will be selected if configured in app-hosting
-Please wait for completion
-....
-
-```
-
-## Add the python script via bash
-
-```
-host-CE-1#guestshell run bash
-[guestshell@guestshell ~]$touch bgp_down.py
-[guestshell@guestshell ~]$ vi bgp_down.py
-<esc>, i
-import sys
-import cli
-
-
-print "\n\n *** Shutting Down BGP Session  *** \n\n"
-cli.configurep(["router bgp 100","neighbor 10.1.2.2 shutdown", "end"])
-<esc>, wq
+(venv) STUACLAR-M-R6EU:challenges_with-network_automation stuaclar$ python router_info.py --ip  ios-xe-mgmt.cisco.com  --port 9443  get_device
+Username: root
+Password:
+Working....
+{
+    "Cisco-IOS-XE-native:native": {
+        "device": {
+            "hostname": "csr1000v",
+            "version": "16.8"
+        }
+    }
+}
+Task completed
 ```
 
 ## About me
