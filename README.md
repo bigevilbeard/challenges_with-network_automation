@@ -116,7 +116,7 @@ Commands:
 ## Example Use Commands
 
 - `python router_info.py --ip 172.16.30.62 get_interfaces`
-- `python router_info.py --file routers.json get_device`
+`python router_info.py --file routers.json get_device`
 
 ```
 (venv) STUACLAR-M-R6EU:challenges_with-network_automation stuaclar$ python router_info.py --ip  ios-xe-mgmt.cisco.com  --port 9443  get_device
