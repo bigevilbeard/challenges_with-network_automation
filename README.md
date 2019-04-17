@@ -28,7 +28,7 @@ source venv/bin/activate
 ```
 ## Install the code requirements
 ```
-pip install -r requirements
+pip install -r requirements.txt
 ```
 
 ## Reservation Setup
@@ -40,7 +40,7 @@ From the `challenges_with-network_automation` directory
 virl ls --all
 
 # Stop any running simulations.
-virl down --sim-name API-Test
+virl down --sim-name <Simulation name>
 
 # Start the VIRL Simulation for demo
 virl up

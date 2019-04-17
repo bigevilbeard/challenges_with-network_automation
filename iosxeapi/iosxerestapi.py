@@ -2,7 +2,6 @@ import requests
 import urllib3
 import logging.config
 import json
-import re
 
 HTTP_SUCCESS_CODES = {
     200: 'OK',

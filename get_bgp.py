@@ -1,11 +1,10 @@
 import requests
 import urllib3
 import sys
-import argparse
 from tabulate import tabulate
 
 
-# HOST = '172.16.30.66'
+# HOST = '172.16.30.68'
 # PORT = '443'
 # USER = 'cisco'
 # PASS = 'cisco'
@@ -30,7 +29,7 @@ def get_bgp():
 
 def main():
     neighbors = get_bgp()
-    print(neighbors)
+    # print(neighbors)
 
     headers = ["Neighbor",
     "LINK",
