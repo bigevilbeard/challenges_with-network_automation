@@ -20,10 +20,9 @@ class Device(object):
 # option for custom port or uses restconf port 443
 @click.option("--port", default=443, help="device port, default = 443" )
 # prompts user for name/password of device(s)
-@click.option("--username",help="device username", prompt=True, hide_input=False)
-@click.option("--password",help="device password", prompt=True, hide_input=True)
+@click.option("--username",help="device username (default lab username = cisco)", prompt=True, hide_input=False)
+@click.option("--password",help="device password (default lab password = cisco)", prompt=True, hide_input=True)
 @click.pass_context
-
 
 def main(ctx, ip, file, port, username, password):
     """Gather and Add IOS XE device information using restconf"""

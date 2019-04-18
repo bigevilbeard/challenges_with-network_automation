@@ -3,7 +3,7 @@
 ## DevNet Sandbox
 All code has been tested on the Cisco DevNet Multi-IOS Cisco Test Network Sandbox [HERE](https://devnetsandbox.cisco.com/RM/Diagram/Index/6b023525-4e7f-4755-81ae-05ac500d464a?diagramType=Topology).
 
-Please see the sandbox pages for credentials and reservations. This demo example is based on Python 3.6 and was tested successfully under that version.
+Please see the sandbox pages for credentials and reservations, virl default passwords are used on all routers (cisco/cisco). This demo example is based on Python 3.6 and was tested successfully under that version.
 
 
 ## Code
@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ```
 
 ## Reservation Setup
-This lesson leverages a specific [VIRL](https://github.com/bigevilbeard/challenges_with-network_automation/blob/master/topology.virl) topology. Before beginning this lesson run the following command to reconfigure the Sandbox with the proper topology.
+This lesson leverages a specific [VIRL](https://github.com/bigevilbeard/automated_bgp_iox/blob/master/topology.virl) topology, as such virl default passwords are used on all routers (cisco/cisco). Before beginning this lesson run the following command to reconfigure the Sandbox with the proper topology.
 
 From the `challenges_with-network_automation` directory
 ```
@@ -101,8 +101,8 @@ Options:
   --ip TEXT        ip or dns address of device
   --file TEXT      file ip addresses of devices
   --port INTEGER   device port, default = 443
-  --username TEXT  device username
-  --password TEXT  device password
+  --username TEXT  device username (default lab username = cisco)
+  --password TEXT  device password (default lab password = cisco)
   --help           Show this message and exit.
 
 Commands:
@@ -119,8 +119,8 @@ Commands:
 `python router_info.py --file routers.json get_device`
 
 ```
-(venv) STUACLAR-M-R6EU:challenges_with-network_automation stuaclar$ python router_info.py --ip  ios-xe-mgmt.cisco.com  --port 9443  get_device
-Username: root
+(venv) STUACLAR-M-R6EU:challenges_with-network_automation stuaclar$ python router_info.py --ip  172.16.30.89 get_device
+Username: cisco
 Password:
 Working....
 {

@@ -1,14 +1,13 @@
 import requests
 import urllib3
 import sys
-# import argparse
 from tabulate import tabulate
 
 
-HOST = '172.16.30.69'
-PORT = '443'
-USER = 'cisco'
-PASS = 'cisco'
+# HOST = '172.16.30.69'
+# PORT = '443'
+# USER = 'cisco'
+# PASS = 'cisco'
 
 # HOST = 'ios-xe-mgmt.cisco.com'
 # PORT = '9443'
